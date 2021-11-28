@@ -320,17 +320,7 @@ if __name__ == "__main__":
     ec2_client = boto3.client("ec2", region_name=region)
     ec2_resoure = boto3.resource("ec2", region_name=region)
     cloudwatch = boto3.client("cloudwatch", region_name=region)
-
-    # for testing
-    # instance_id = "i-050d75672f82a455b"
-    # key_name = "otabekfeter1"
-    # instancetype = "t3.micro"
-    # imageID = "ami-0bd9c26722573e69b"
-    # security_group_name = "OtabekFeterServer"
-    # security_group_id = "sg-09764da1a9dcdf1da"
-    # vpc_id = "vpc-428a662b"
-
-    
+ 
     # calling the main function
     main_menu_loop(ec2_client, ec2_resoure, s3_client, s3_resource, cloudwatch)
     print("Program finished")
