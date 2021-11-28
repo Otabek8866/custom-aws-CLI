@@ -103,35 +103,3 @@ def terminate_instance(ec2_client, instance_id):
 def status_instance(ec2_resource, id_instance):
     instance = ec2_resource.Instance(id_instance)
     print("ID:"+str(instance.id), "   State:"+str(instance.state["Name"]), "   Public IP:"+str(instance.public_ip_address))
-
-
-
-# if __name__ == "__main__":
-
-    # # Regions = {Stockholm: eu-north-1, Frankfurt: eu-central-1}
-
-    # region = "eu-north-1"
-    # key_name = "otabekfeter4"
-    # imageID = "ami-0bd9c26722573e69b"  # Ubuntu Server 20.04 LTS (64bit x86)
-    # instancetype = "t3.micro"
-
-    # security_group_name = "OtabekFeterServer"
-    # security_group_id = "sg-09764da1a9dcdf1da"
-    # vpc_id = "vpc-428a662b"
-    # instance_id = "i-050d75672f82a455b"
-
-    # ec2_client = boto3.client("ec2", region_name=region)
-    # ec2_resource = boto3.resource("ec2", region_name=region)
-
-    # ======================= testing all the functions =========================
-
-    #security_group_id = create_sec_group(ec2_client, security_group_name)
-    #create_key_pair(ec2_client, key_name)
-    #instance_id = create_instance(ec2_client, imageID, 1, 1, instancetype, key_name, security_group_id)
-    #status_instance(ec2_resource, instance_id)
-    #list_regions(ec2_client)
-    #get_running_instances(ec2_resource)
-
-    # ===========================================================================
-
-    
