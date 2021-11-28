@@ -3,7 +3,7 @@
 ## Set up credentials
 Creat a file in the following format and place
 
-Path: ~.aws/credentails
+Path: ~/.aws/credentails
 
 File format:
 
