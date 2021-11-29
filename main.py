@@ -23,7 +23,7 @@ EC2_MENU = """ ====== EC2 services ======
 [ 2 ] Listing Instances
 [ 3 ] Create KeyPair
 [ 4 ] Create Security-Group
-[ 5 ] Manage Instance (create, monitor, stop, terminate)
+[ 5 ] Manage Instance (create, start, stop, terminate)
 [ 0 ] Back
 """
 ec2_menu_list = [1,2,3,4,5,0]
