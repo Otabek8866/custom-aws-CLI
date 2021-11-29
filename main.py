@@ -13,9 +13,10 @@ import s3_aws
 MAIN_MENU = """ ====== Services ======
 [ 1 ] EC2
 [ 2 ] S3
+[ 3 ] Cloudwatch
 [ 0 ] Quit
 """
-main_menu_list = [1,2,0]
+main_menu_list = [1,2,3,0]
 
 EC2_MENU = """ ====== EC2 services ====== 
 [ 1 ] List Available Regions
@@ -30,13 +31,12 @@ ec2_menu_list = [1,2,3,4,5,0]
 EC2_INSTANCE = """ ====== Manage Instance ======
 [ 1 ] Status of Intance
 [ 2 ] Create Instance
-[ 3 ] Monitor Instacne --> (Cloudwatch)
+[ 3 ] Start Instance
 [ 4 ] Stop Instacne
 [ 5 ] Terminate Instance
-[ 6 ] Start Instance
 [ 0 ] Back
 """
-ec2_instance_list = [1,2,3,4,5,6,0]
+ec2_instance_list = [1,2,3,4,5,0]
 
 CLOUDWATCH_MENU = """ ====== Metrics ======
 [ 1 ] CPU Utilization
@@ -119,10 +119,13 @@ def main_menu_loop(ec2_client, ec2_resoure, s3_client, s3_resource, cloudwatch):
         print_menu(index, clear=True)
         choice = get_input(menu_list_dict[index])
         if choice == 1:
-            ec2_menu_loop(ec2_client, ec2_resoure, cloudwatch)
+            ec2_menu_loop(ec2_client, ec2_resoure)
 
         elif choice == 2:
             s3_menu_loop(s3_client, s3_resource, ec2_client)
+
+        elif choice == 3:
+            cloudwatch_loop(cloudwatch)
 
         else:
             print_menu(clear=True, menu=False)
@@ -130,7 +133,7 @@ def main_menu_loop(ec2_client, ec2_resoure, s3_client, s3_resource, cloudwatch):
             
 
 # EC2 menu loop function
-def ec2_menu_loop(ec2_client, ec2_resource, cloudwatch):
+def ec2_menu_loop(ec2_client, ec2_resource):
     global menu_list_dict
     index = 2
     print_menu(clear=True, menu=False)
@@ -145,19 +148,27 @@ def ec2_menu_loop(ec2_client, ec2_resource, cloudwatch):
             ec2_aws.get_running_instances(ec2_resource)
 
         elif choice == 3:
-            print("Enter a KeyPair name")
-            key_name = get_str_input()
-            ec2_aws.create_key_pair(ec2_client, key_name)
-            print("KeyPair created successfully. File name:", key_name + ".pem")
+            try:
+                print("Enter a KeyPair name")
+                key_name = get_str_input()
+                ec2_aws.create_key_pair(ec2_client, key_name)
+                print("KeyPair created successfully. File name:", key_name + ".pem")
+            except Exception as e:
+                print("Problem occured:", e)
+                pass
 
         elif choice == 4:
-            print("Enter a SecurityGroup name")
-            security_group_name = get_str_input()
-            ec2_aws.create_sec_group(ec2_client, security_group_name)
-            print("Security Group created successfully")
+            try:
+                print("Enter a SecurityGroup name")
+                security_group_name = get_str_input()
+                ec2_aws.create_sec_group(ec2_client, security_group_name)
+                print("Security Group created successfully")
+            except Exception as e:
+                print("Problem occured:", e)
+                pass
 
         elif choice == 5:
-            ec2_instance_loop(ec2_client, ec2_resource, cloudwatch)
+            ec2_instance_loop(ec2_client, ec2_resource)
 
         else:
             print_menu(clear=True, menu=False)
@@ -165,7 +176,7 @@ def ec2_menu_loop(ec2_client, ec2_resource, cloudwatch):
 
 
 # EC2 instance loop function
-def ec2_instance_loop(ec2_client, ec2_resource, cloudwatch):
+def ec2_instance_loop(ec2_client, ec2_resource):
     global menu_list_dict
     index = 3
     print_menu(clear=True, menu=False)
@@ -174,42 +185,60 @@ def ec2_instance_loop(ec2_client, ec2_resource, cloudwatch):
         print_menu(index)
         choice = get_input(menu_list_dict[index])
         if choice == 1:
-            id_instance = str(input("Please enter instance ID: "))
-            ec2_aws.status_instance(ec2_resource, id_instance)
+            try:
+                id_instance = input("Please enter instance ID: ")
+                ec2_aws.status_instance(ec2_resource, id_instance)
+            except Exception as e:
+                print("Problem occured:", e)
+                pass
 
         elif choice == 2:
-            # getting all the arguments from user input
-            region_name = input("Please enter region code: ")
-            keyname = input("Enter KeyPair name: ")
-            security_group_id = input("Enter Security Group ID: ")
-            print("How many instances do you want to launch")
-            maxcount = get_input([1,2,3])
-            imageID = "ami-0bd9c26722573e69b"  # Ubuntu Server 20.04 LTS (64bit x86)
-            instancetype = "t3.micro"
-            mincount = maxcount
+            try:
+                # getting all the arguments from user input
+                region_name = input("Please enter region code: ")
+                keyname = input("Enter KeyPair name: ")
+                security_group_id = input("Enter Security Group ID: ")
+                print("How many instances do you want to launch")
+                maxcount = get_input([1,2,3])
+                imageID = "ami-0bd9c26722573e69b"  # Ubuntu Server 20.04 LTS (64bit x86)
+                instancetype = "t3.micro"
+                mincount = maxcount
 
-            # calling instance creation function
-            ec2_client = boto3.client("ec2", region_name=region_name)
-            ec2_aws.create_instance(ec2_client, imageID, mincount, maxcount, instancetype, keyname, security_group_id)
-            print("Instance(s) created successfully")
+                # calling instance creation function
+                ec2_client = boto3.client("ec2", region_name=region_name)
+                ec2_aws.create_instance(ec2_client, imageID, mincount, maxcount, instancetype, keyname, security_group_id)
+                print("Instance(s) created successfully")
+
+            except Exception as e:
+                print("Problem occured:", e)
+                pass
 
         elif choice == 3:
-            cloudwatch_loop(cloudwatch)
+            try:
+                id_instance = input("Please enter instance ID: ")
+                ec2_aws.start_stop_instance(ec2_client, id_instance, True)
+                print("Instance started successfully")
+            except Exception as e:
+                print("Problem occured:", e)
+                pass
 
         elif choice == 4:
-            id_instance = input("Please enter instance ID: ")
-            ec2_aws.start_stop_instance(ec2_client, id_instance, False)
-            print("Instance stopped successfully")
+            try:
+                id_instance = input("Please enter instance ID: ")
+                ec2_aws.start_stop_instance(ec2_client, id_instance, False)
+                print("Instance stopped successfully")
+            except Exception as e:
+                print("Problem occured:", e)
+                pass
 
         elif choice == 5:
-            id_instance = input("Please enter instance ID: ")
-            ec2_aws.terminate_instance(ec2_client, id_instance)
-            print("Instance terminated successfully")
-
-        elif choice == 6:
-            id_instance = input("Please enter instance ID: ")
-            ec2_aws.start_stop_instance(ec2_client, id_instance, True)
-            print("Instance started successfully")
+            try:
+                id_instance = input("Please enter instance ID: ")
+                ec2_aws.terminate_instance(ec2_client, id_instance)
+                print("Instance terminated successfully")
+            except Exception as e:
+                print("Problem occured:", e)
+                pass
 
         else:
             print_menu(clear=True, menu=False)
@@ -230,8 +259,12 @@ def cloudwatch_loop(cloudwatch):
             print_menu(clear=True, menu=False)
             return
 
-        id_instance = input("Please enter instance ID: ")
-        get_metrics_image(cloudwatch, id_instance, metrics_dict[choice])
+        try:
+            id_instance = input("Please enter instance ID: ")
+            get_metrics_image(cloudwatch, id_instance, metrics_dict[choice])
+        except Exception as e:
+            print("Problem occured:", e)
+            pass
 
 
 # S3 menu loop function
@@ -251,39 +284,63 @@ def s3_menu_loop(s3_client, s3_resource, ec2_client):
             s3_aws.print_content(s3_client)
 
         elif choice == 3:
-            # Later add an option to select a region
-            print("Enter a name for bucket")
-            bucket_name = get_str_input()
-            s3_aws.create_bucket(s3_resource, bucket_name)
+            try:
+                # Later add an option to select a region
+                print("Enter a name for bucket")
+                bucket_name = get_str_input()
+                s3_aws.create_bucket(s3_resource, bucket_name)
+            except Exception as e:
+                print("Problem occured:", e)
+                pass
 
         elif choice == 4:
-            print("Enter a name for bucket")
-            bucket_name = get_str_input()
-            s3_aws.empty_bucket(s3_resource, bucket_name)
-            print("Bucket emptied successfully")
+            try:
+                print("Enter a name for bucket")
+                bucket_name = input("Input: ")
+                s3_aws.empty_bucket(s3_resource, bucket_name)
+                print("Bucket emptied successfully")
+            except Exception as e:
+                print("Problem occured:", e)
+                pass
 
         elif choice == 5:
-            bucket_name = input("Please enter bucketname: ")
-            file_name = input("Please enter filename: ")
-            s3_aws.upload_file(s3_resource, bucket_name, "files/"+file_name, file_name)
-            print("File uploaded successfully")
+            try:
+                bucket_name = input("Please enter bucketname: ")
+                file_name = input("Please enter filename: ")
+                s3_aws.upload_file(s3_resource, bucket_name, "files/"+file_name, file_name)
+                print("File uploaded successfully")
+            except Exception as e:
+                print("Problem occured:", e)
+                pass
         
         elif choice == 6:
-            bucket_name = input("Please enter bucketname: ")
-            file_name = input("Please enter filename: ")
-            s3_aws.download_file(s3_client, bucket_name, file_name)
-            print("File downloaded successfully")
+            try:
+                bucket_name = input("Please enter bucketname: ")
+                file_name = input("Please enter filename: ")
+                s3_aws.download_file(s3_client, bucket_name, file_name)
+                print("File downloaded successfully")
+            except Exception as e:
+                print("Problem occured:", e)
+                pass
 
         elif choice == 7:
-            bucket_name = input("Please enter bucketname: ")
-            file_name = input("Please enter filename: ")
-            s3_aws.delete_file(s3_resource, bucket_name, file_name)
-            print("File deleted successfully")
+            try:
+                bucket_name = input("Please enter bucketname: ")
+                file_name = input("Please enter filename: ")
+                s3_aws.delete_file(s3_resource, bucket_name, file_name)
+                print("File deleted successfully")
+            except Exception as e:
+                print("Problem occured:", e)
+                pass
 
         elif choice == 8:
-            bucket_name = input("Please enter bucketname: ")
-            s3_aws.delete_bucket(s3_client, bucket_name)
-            print("Bucket deleted successfully")
+            try:
+                bucket_name = input("Please enter bucketname: ")
+                s3_aws.delete_bucket(s3_client, bucket_name)
+                print("Bucket deleted successfully")
+            except Exception as e:
+                print("Problem occured:", e)
+                pass
 
         else:
             print_menu(clear=True, menu=False)
@@ -303,8 +360,9 @@ def get_metrics_image(cloudwatch, instance_id, metric_name):
         plt.title(metric_name)
         plt.imshow(mpimg.imread(file_name))
         plt.show()
-    except:
+    except Exception as e:
         print("Invalid input, please try again!")
+        print(e)
         pass
 
 
