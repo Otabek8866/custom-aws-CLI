@@ -21,7 +21,7 @@
 # User Manual
 ![image](https://user-images.githubusercontent.com/55482580/151803922-0fb7c61a-295a-427c-922f-f8ba80f41dec.png)
               
-                                              The main menu
+                                              Main menu
                                               
                                               
 ![image](https://user-images.githubusercontent.com/55482580/151804239-fc8b04da-9dd2-4f22-9df9-b89c029684c1.png)
@@ -36,11 +36,6 @@
 ![image](https://user-images.githubusercontent.com/55482580/151804239-fc8b04da-9dd2-4f22-9df9-b89c029684c1.png)
 
                                               EC2 Service Functions
-
-
-![image](https://user-images.githubusercontent.com/55482580/151803922-0fb7c61a-295a-427c-922f-f8ba80f41dec.png)
-              
-                                              The main menu
                                               
                                               
 ![image](https://user-images.githubusercontent.com/55482580/151804239-fc8b04da-9dd2-4f22-9df9-b89c029684c1.png)
