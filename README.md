@@ -4,9 +4,11 @@
 Creat a file in the following format and place   
 Path: ~/.aws/credentails   
 File format:   
-```[default]   
+```
+[default]   
 aws_access_key_id=your_access_key_id   
-aws_secret_access_key=your_secret_access_key```
+aws_secret_access_key=your_secret_access_key
+```
 
 # Objectives
 1. Setup a programming environment for building (using programming tools and languages) Cloud services for a major Cloud provider, for example, Amazon Web services (AWS).
@@ -16,7 +18,7 @@ aws_secret_access_key=your_secret_access_key```
 # User Manual
                                               Main menu
 
-![image](https://user-images.githubusercontent.com/55482580/151803922-0fb7c61a-295a-427c-922f-f8ba80f41dec.png)
+![alt EC2 Service Functions](https://user-images.githubusercontent.com/55482580/151803922-0fb7c61a-295a-427c-922f-f8ba80f41dec.png)
               
                                               EC2 Service Functions                                             
                                               
