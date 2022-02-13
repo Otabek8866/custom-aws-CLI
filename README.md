@@ -4,9 +4,9 @@
 Creat a file in the following format and place   
 Path: ~/.aws/credentails   
 File format:   
-[default]   
+```[default]   
 aws_access_key_id=your_access_key_id   
-aws_secret_access_key=your_secret_access_key
+aws_secret_access_key=your_secret_access_key```
 
 # Objectives
 1. Setup a programming environment for building (using programming tools and languages) Cloud services for a major Cloud provider, for example, Amazon Web services (AWS).
