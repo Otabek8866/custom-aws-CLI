@@ -18,7 +18,7 @@ aws_secret_access_key=your_secret_access_key
 # User Manual
                                               Main menu
 
-![EC2 Service Functions](https://user-images.githubusercontent.com/55482580/151803922-0fb7c61a-295a-427c-922f-f8ba80f41dec.png)
+![alt EC2 Service Functions](https://user-images.githubusercontent.com/55482580/151803922-0fb7c61a-295a-427c-922f-f8ba80f41dec.png)
               
                                               EC2 Service Functions                                             
                                               
